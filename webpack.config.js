@@ -6,7 +6,7 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-    clean: true, // Clean the output directory before each build
+    clean: true,
   },
   mode: "development",
   module: {

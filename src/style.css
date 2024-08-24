@@ -1,11 +1,40 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  text-align: center;
   margin: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-img {
-  width: 200px;
-  height: auto;
+body:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 50% 0,
+      rgba(48, 220, 255, 0.5),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    radial-gradient(
+      circle at 6.7% 75%,
+      rgba(0, 0, 255, 0.5),
+      rgba(0, 0, 255, 0) 70.71%
+    ),
+    radial-gradient(
+      circle at 93.3% 75%,
+      rgba(154, 72, 212, 0.5),
+      rgba(0, 255, 0, 0) 70.71%
+    );
+}
+
+.app {
+  position: relative;
+  margin: 2%;
+  background-color: rgba(255, 255, 255, 0.491);
+  height: 92vh;
+  z-index: 2;
 }
