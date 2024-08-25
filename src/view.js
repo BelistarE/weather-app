@@ -2,6 +2,8 @@
 import { getWeather } from "./weather";
 import { fetchUserCity } from "./getlocation";
 
+const main = document.querySelector(".app");
+
 async function init() {
   // Show the loading screen
   document.getElementById("loading-screen").style.display = "flex";
@@ -13,14 +15,25 @@ async function init() {
     const weatherData = await getWeather(city, "us");
     console.log("Weather Data:", weatherData);
 
-    // Hide the loading screen and show the main content
+    // Hide the loading screen
     document.getElementById("loading-screen").style.display = "none";
     document.querySelector(".app").style.display = "block";
-
-    // Handle the display of weather data or other content here
+    //display stuff
+    render(city, weatherData);
   } catch (error) {
     console.error("Error during initialization:", error);
   }
 }
 
+function render(city, weatherData) {
+  displayHeader(city);
+}
+function displayHeader(city) {
+  const locationText = document.querySelector(".locationText");
+  console.log("city unformatted:" + city);
+  const parts = city.split(",").map((part) => part.trim());
+
+  const cityName = parts[0];
+  locationText.textContent = cityName;
+}
 export { init };
