@@ -16,17 +16,17 @@ body:before {
   bottom: 0;
   background: radial-gradient(
       circle at 50% 0,
-      rgba(48, 220, 255, 0.5),
+      rgba(53, 135, 152, 0.8),
       rgba(255, 0, 0, 0) 70.71%
     ),
     radial-gradient(
       circle at 6.7% 75%,
-      rgba(0, 0, 255, 0.5),
+      rgba(34, 34, 173, 0.8),
       rgba(0, 0, 255, 0) 70.71%
     ),
     radial-gradient(
       circle at 93.3% 75%,
-      rgba(154, 72, 212, 0.5),
+      rgba(154, 64, 190, 0.8),
       rgba(0, 255, 0, 0) 70.71%
     );
 }
@@ -34,7 +34,20 @@ body:before {
 .app {
   position: relative;
   margin: 2%;
-  background-color: rgba(255, 255, 255, 0.491);
-  height: 92vh;
+  background-color: rgba(206, 206, 206, 0.25);
+  height: 90vh;
   z-index: 2;
+}
+#loading-screen {
+  position: fixed;
+  color: white;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Ensure it sits on top of everything */
 }
