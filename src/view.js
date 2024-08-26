@@ -44,6 +44,7 @@ function displayCurrent(weatherData) {
   const currentTime = weatherData.currentConditions.datetime;
   const currentIcon = weatherData.currentConditions.icon;
   const currentPrecipProb = weatherData.currentConditions.precipprob;
+  const currentConditions = weatherData.currentConditions.conditions;
 
   console.log("Current Temp:", currentTemp);
   console.log("Current Time:", currentTime);
@@ -75,6 +76,10 @@ function displayCurrent(weatherData) {
     hours = 12;
   }
   time.innerHTML = `${hours}:${minutes} ${period}`;
+
+  //conditions
+  const cast = document.querySelector(".cast");
+  cast.innerHTML = currentConditions;
 }
 
 function displayNext12(weatherData, currentTime) {
