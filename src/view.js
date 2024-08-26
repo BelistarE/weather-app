@@ -5,6 +5,23 @@ import Chart from "chart.js/auto";
 import "./weather-icons.min.css";
 let units = "us";
 const main = document.querySelector(".app");
+//icon mapping
+function getWeatherIcon(condition) {
+  switch (condition.toLowerCase()) {
+    case "clear":
+      return "wi-day-sunny";
+    case "partly cloudy":
+      return "wi-day-cloudy";
+    case "cloudy":
+      return "wi-cloudy";
+    case "rain":
+      return "wi-rain";
+    case "snow":
+      return "wi-snow";
+    default:
+      return "wi-na"; // Default icon for unknown conditions
+  }
+}
 
 async function init() {
   // Show the loading screen
@@ -83,6 +100,11 @@ function displayCurrent(weatherData) {
   //precipirationprob
   const precipirationprobselector = document.querySelector(".precip-prop");
   precipirationprobselector.innerHTML = ` ${currentPrecipProb} `;
+  //icon
+  const iconClass = getWeatherIcon(currentConditions);
+
+  const iconElement = document.querySelector(".weather-icon"); // Make sure this element exists in your HTML
+  iconElement.className = `wi ${iconClass}`;
 }
 
 function displayNext12(weatherData, currentTime) {
