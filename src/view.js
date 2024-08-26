@@ -80,6 +80,9 @@ function displayCurrent(weatherData) {
   //conditions
   const cast = document.querySelector(".cast");
   cast.innerHTML = currentConditions;
+  //precipirationprob
+  const precipirationprobselector = document.querySelector(".precip-prop");
+  precipirationprobselector.innerHTML = ` ${currentPrecipProb} `;
 }
 
 function displayNext12(weatherData, currentTime) {
