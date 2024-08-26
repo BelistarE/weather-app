@@ -45,12 +45,13 @@ body:before {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: 2%;
   height: 90vh;
   z-index: 2;
   padding: 10%;
+  padding-top: 0px;
 }
 #loading-screen {
   position: fixed;
@@ -132,11 +133,15 @@ input:checked + .slider:before {
 }
 .current-weather {
   background-color: rgba(206, 206, 206, 0.288);
-  height: 30%;
+  height: 40%;
   width: 100%;
+  color: white;
 }
 .next {
   background-color: rgba(206, 206, 206, 0.288);
+  width: 100%;
+  height: 400px;
+  position: relative;
 }
 .following-days {
   background-color: rgba(206, 206, 206, 0.288);
@@ -144,4 +149,8 @@ input:checked + .slider:before {
 .section {
   margin: 20px;
   width: 80%;
+}
+.graph {
+  width: 100%;
+  height: 100%;
 }

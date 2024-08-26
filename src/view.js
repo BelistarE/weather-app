@@ -48,8 +48,18 @@ function displayCurrent(weatherData) {
   console.log("Current Time:", currentTime);
   console.log("Current Icon:", currentIcon);
   console.log("Precipitation Probability:", currentPrecipProb);
-
+  let displayTemp = document.querySelector(".current-temp");
+  const degreeSign = "°";
+  let currentUnits = "";
+  if (units === "us") {
+    currentUnits = "F";
+  } else {
+    currentUnits = "C";
+  }
+  displayTemp.innerHTML = `${currentTemp}${degreeSign} ${currentUnits}`;
   displayNext12(weatherData, currentTime);
+
+  //
 }
 
 function displayNext12(weatherData, currentTime) {
@@ -66,18 +76,14 @@ function displayNext12(weatherData, currentTime) {
       (hour) => parseInt(hour.datetime.split(":")[0], 10) > currentHour
     );
 
-    // Get the remaining hours of today
     const todayRemainingHours = todayHours.slice(nextHourIndex);
 
-    // Add these hours to hoursData
     hoursData = hoursData.concat(todayRemainingHours);
 
-    // If we need more hours to reach 12, get them from the next day's hoursData
     if (hoursData.length < 12 && weatherData.days.length > 1) {
       const tomorrowHours = weatherData.days[1].hours;
       const hoursNeeded = 12 - hoursData.length;
 
-      // Slice the next day's hours to get the needed hours
       const tomorrowHoursSlice = tomorrowHours.slice(0, hoursNeeded);
       hoursData = hoursData.concat(tomorrowHoursSlice);
     }
