@@ -1,16 +1,24 @@
 @import url("reset.css");
+html,
 body {
   margin: 0;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  padding: 0;
+  height: 100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+body {
+  position: relative; /* Relative positioning for the pseudo-element */
+  min-height: 100vh; /* Ensure body covers viewport height */
 }
 
 body:before {
   content: "";
-  position: absolute;
+  position: fixed; /* Fixed position to cover the viewport even when scrolling */
   top: 0;
   left: 0;
   right: 0;
@@ -30,10 +38,15 @@ body:before {
       rgba(154, 64, 190, 0.8),
       rgba(0, 255, 0, 0) 70.71%
     );
+  z-index: -1; /* Ensure the background is behind the content */
 }
 
 .app {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 2%;
   height: 90vh;
   z-index: 2;
@@ -121,4 +134,14 @@ input:checked + .slider:before {
   background-color: rgba(206, 206, 206, 0.288);
   height: 30%;
   width: 100%;
+}
+.next {
+  background-color: rgba(206, 206, 206, 0.288);
+}
+.following-days {
+  background-color: rgba(206, 206, 206, 0.288);
+}
+.section {
+  margin: 20px;
+  width: 80%;
 }

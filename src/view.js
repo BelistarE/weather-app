@@ -1,6 +1,7 @@
 // view.js
 import { getWeather } from "./weather";
 import { fetchUserCity } from "./getlocation";
+import Chart from "chart.js/auto";
 let units = "us";
 const main = document.querySelector(".app");
 
@@ -48,10 +49,10 @@ function displayCurrent(weatherData) {
   console.log("Current Icon:", currentIcon);
   console.log("Precipitation Probability:", currentPrecipProb);
 
-  displayNext12(weatherData);
+  displayNext12(weatherData, currentTime);
 }
 
-function displayNext12(weatherData) {
+function displayNext12(weatherData, currentTime) {
   if (weatherData.days && weatherData.days.length > 0) {
     let hoursData = [];
 
@@ -65,10 +66,10 @@ function displayNext12(weatherData) {
       (hour) => parseInt(hour.datetime.split(":")[0], 10) > currentHour
     );
 
-    //get the remaining hours of today
+    // Get the remaining hours of today
     const todayRemainingHours = todayHours.slice(nextHourIndex);
 
-    // add these hours to hoursData
+    // Add these hours to hoursData
     hoursData = hoursData.concat(todayRemainingHours);
 
     // If we need more hours to reach 12, get them from the next day's hoursData
@@ -82,6 +83,65 @@ function displayNext12(weatherData) {
     }
 
     console.log("Next 12 hours data:", hoursData);
+
+    // Prepare data for the chart
+
+    const labels = hoursData.map((hour) => {
+      const date = new Date(`1970-01-01T${hour.datetime}`);
+      const hours = date.getHours();
+      const formattedHour = hours % 12 || 12;
+      const ampm = hours >= 12 ? " PM" : " AM";
+      return `${formattedHour}${ampm}`;
+    });
+
+    const temperatures = hoursData.map((hour) => hour.temp);
+    const minTemp = Math.min(...temperatures) - 10;
+    const maxTemp = Math.max(...temperatures) + 10;
+    // Create the chart
+    const ctx = document.getElementById("graph").getContext("2d");
+    const myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Temperature",
+            data: temperatures,
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+            fill: true,
+            pointRadius: 0,
+            tension: 0.1,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: minTemp,
+            max: maxTemp,
+            title: {
+              display: false,
+            },
+            ticks: {
+              callback: function (value, index, values) {
+                if (index === 0 || index === values.length - 1) {
+                  return "";
+                }
+                return value + "°";
+              },
+            },
+          },
+        },
+      },
+    });
   } else {
     console.error("Hourly data not found in the API response.");
   }
