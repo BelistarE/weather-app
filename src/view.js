@@ -2,6 +2,7 @@
 import { getWeather } from "./weather";
 import { fetchUserCity } from "./getlocation";
 import Chart from "chart.js/auto";
+import "./weather-icons.min.css";
 let units = "us";
 const main = document.querySelector(".app");
 
@@ -56,10 +57,24 @@ function displayCurrent(weatherData) {
   } else {
     currentUnits = "C";
   }
-  displayTemp.innerHTML = `${currentTemp}${degreeSign} ${currentUnits}`;
+  const roundedTemp = Math.round(currentTemp);
+  displayTemp.innerHTML = `${roundedTemp}${degreeSign} ${currentUnits}`;
   displayNext12(weatherData, currentTime);
 
-  //
+  //time
+  const time = document.querySelector(".time");
+  let [hours, minutes, seconds] = currentTime.split(":");
+  let period = "AM";
+
+  hours = parseInt(hours, 10);
+  if (hours >= 12) {
+    period = "PM";
+    hours = hours > 12 ? hours - 12 : hours;
+  }
+  if (hours === 0) {
+    hours = 12;
+  }
+  time.innerHTML = `${hours}:${minutes} ${period}`;
 }
 
 function displayNext12(weatherData, currentTime) {

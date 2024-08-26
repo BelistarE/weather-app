@@ -136,6 +136,8 @@ input:checked + .slider:before {
   height: 40%;
   width: 100%;
   color: white;
+  display: flex;
+  flex-direction: column;
 }
 .next {
   background-color: rgba(206, 206, 206, 0.288);
