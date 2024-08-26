@@ -34,7 +34,7 @@ async function getWeather(city, units) {
     }
 
     const data = await response.json();
-    console.log("The JSON in object format is:", data);
+    console.log("Full API Response:", JSON.stringify(data, null, 2));
 
     return data;
   } catch (error) {
