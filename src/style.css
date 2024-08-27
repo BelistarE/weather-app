@@ -12,8 +12,11 @@ body {
 }
 
 body {
-  position: relative; /* Relative positioning for the pseudo-element */
-  min-height: 100vh; /* Ensure body covers viewport height */
+  position: relative;
+  min-height: 100vh;
+  justify-self: center;
+  align-self: center;
+  width: 100%;
 }
 
 body:before {
@@ -43,14 +46,12 @@ body:before {
 
 .app {
   position: relative;
-  display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
   margin: 2%;
   height: 90vh;
   z-index: 2;
-  padding: 10%;
+  padding: 20%;
   padding-top: 0px;
 }
 #loading-screen {
@@ -101,7 +102,10 @@ body:before {
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: "F"; /* Default text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 26px;
   width: 26px;
   border-radius: 50%;
@@ -109,6 +113,8 @@ body:before {
   bottom: 4px;
   background-color: white;
   transition: 0.4s;
+  font-size: 14px;
+  color: #000; /* Text color */
 }
 
 input:checked + .slider {
@@ -117,6 +123,7 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+  content: "C"; /* Text for Celsius */
 }
 
 .slider:active:before {
@@ -150,7 +157,8 @@ input:checked + .slider:before {
 }
 .section {
   margin: 20px;
-  width: 80%;
+  width: 100%;
+  max-width: 700px;
 }
 .graph {
   width: 100%;
@@ -173,6 +181,19 @@ input:checked + .slider:before {
   margin: 5%;
 }
 
+.left {
+  display: flex;
+  font-size: 50px;
+  align-items: center;
+}
+
 .precip-prop {
   padding-left: 5px;
+}
+.top-section {
+  margin: 5%;
+  margin-bottom: 0px;
+}
+.cast {
+  font-weight: bold;
 }

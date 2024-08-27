@@ -2,15 +2,18 @@
 import { getWeather } from "./weather";
 import { fetchUserCity } from "./getlocation";
 import Chart from "chart.js/auto";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+Chart.register(ChartDataLabels);
 import "./weather-icons.min.css";
 let units = "us";
 const main = document.querySelector(".app");
 //icon mapping
 function getWeatherIcon(condition) {
+  console.log("getweatherIcon:" + condition);
   switch (condition.toLowerCase()) {
     case "clear":
       return "wi-day-sunny";
-    case "partly cloudy":
+    case "partially cloudy":
       return "wi-day-cloudy";
     case "cloudy":
       return "wi-cloudy";
@@ -36,7 +39,7 @@ async function init() {
 
     // Hide the loading screen
     document.getElementById("loading-screen").style.display = "none";
-    document.querySelector(".app").style.display = "block";
+    document.querySelector(".app").style.display = "flex";
     //display stuff
     render(city, weatherData);
   } catch (error) {
@@ -103,7 +106,7 @@ function displayCurrent(weatherData) {
   //icon
   const iconClass = getWeatherIcon(currentConditions);
 
-  const iconElement = document.querySelector(".weather-icon"); // Make sure this element exists in your HTML
+  const iconElement = document.querySelector(".weather-icon");
   iconElement.className = `wi ${iconClass}`;
 }
 
@@ -146,6 +149,7 @@ function displayNext12(weatherData, currentTime) {
     });
 
     const temperatures = hoursData.map((hour) => hour.temp);
+
     const minTemp = Math.min(...temperatures) - 10;
     const maxTemp = Math.max(...temperatures) + 10;
     // Create the chart
@@ -170,7 +174,18 @@ function displayNext12(weatherData, currentTime) {
       options: {
         plugins: {
           legend: {
-            display: false,
+            display: false, // Hide the legend
+          },
+          datalabels: {
+            align: "top", // Position the labels above the points
+            anchor: "end",
+            formatter: function (value, context) {
+              return value + "°"; // Format the label text
+            },
+            font: {
+              weight: "bold",
+            },
+            color: "white",
           },
         },
         scales: {
@@ -179,15 +194,13 @@ function displayNext12(weatherData, currentTime) {
             min: minTemp,
             max: maxTemp,
             title: {
-              display: false,
+              display: false, // Hide the y-axis label
             },
             ticks: {
-              callback: function (value, index, values) {
-                if (index === 0 || index === values.length - 1) {
-                  return "";
-                }
-                return value + "°";
-              },
+              display: false, // Hide the y-axis ticks
+            },
+            grid: {
+              display: false, // Optional: Hide y-axis grid lines
             },
           },
         },
