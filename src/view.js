@@ -1,14 +1,13 @@
 // view.js
 import { getWeather } from "./weather";
 import { fetchUserCity } from "./getlocation";
-import { toggle } from "./convert-units";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
 import "./weather-icons.min.css";
 
-//toggle units
-let units = toggle();
+let units = "us";
+
 const main = document.querySelector(".app");
 //icon mapping
 function getWeatherIcon(condition) {
@@ -63,10 +62,39 @@ async function init() {
 }
 
 function render(city, weatherData) {
+  const currentTime = weatherData.currentConditions.datetime;
   displayHeader(city);
+  toggle(weatherData);
   displayCurrent(weatherData);
+  displayNext12(weatherData, currentTime);
   display7DayForecast(weatherData);
 }
+
+function setUnitsToCelsius(fahrenheit) {
+  return ((fahrenheit - 32) * 5) / 9;
+}
+const toggleBtn = document.getElementById("toggle");
+
+function toggle(weatherData) {
+  const currentTime = weatherData.currentConditions.datetime;
+  toggleBtn.addEventListener("change", function () {
+    if (toggleBtn.checked) {
+      units = "metric";
+      console.log("Units:" + units);
+      displayCurrent(weatherData);
+      displayNext12(weatherData, currentTime);
+      display7DayForecast(weatherData);
+    } else {
+      units = "us";
+      console.log("Units:" + units);
+      displayCurrent(weatherData);
+      displayNext12(weatherData, currentTime);
+      display7DayForecast(weatherData);
+    }
+  });
+  return units;
+}
+
 function displayHeader(city) {
   const locationText = document.querySelector(".locationText");
   console.log("city unformatted:" + city);
@@ -76,14 +104,22 @@ function displayHeader(city) {
   locationText.textContent = cityName;
 }
 function displayCurrent(weatherData) {
-  const currentTemp = weatherData.currentConditions.temp;
+  let currentTemp = weatherData.currentConditions.temp;
   const currentTime = weatherData.currentConditions.datetime;
   const currentPrecipProb = weatherData.currentConditions.precipprob;
   const currentConditions = weatherData.currentConditions.conditions;
-  const feelslike = weatherData.currentConditions.feelslike;
+  let feelslike = weatherData.currentConditions.feelslike;
   const currentIcon = weatherData.currentConditions.icon;
-  const minTemp = weatherData.days[0].tempmin;
-  const maxTemp = weatherData.days[0].tempmax;
+  let minTemp = weatherData.days[0].tempmin;
+  let maxTemp = weatherData.days[0].tempmax;
+
+  //if units are c
+  if (units === "metric") {
+    currentTemp = setUnitsToCelsius(currentTemp);
+    feelslike = setUnitsToCelsius(feelslike);
+    minTemp = setUnitsToCelsius(minTemp);
+    maxTemp = setUnitsToCelsius(maxTemp);
+  }
 
   let displayTemp = document.querySelector(".current-temp");
   const degreeSign = "°";
@@ -95,7 +131,6 @@ function displayCurrent(weatherData) {
   }
   const roundedTemp = Math.round(currentTemp);
   displayTemp.innerHTML = `${roundedTemp}${degreeSign} ${currentUnits}`;
-  displayNext12(weatherData, currentTime);
 
   //time
   const time = document.querySelector(".time");
@@ -122,7 +157,8 @@ function displayCurrent(weatherData) {
   const iconClass = getWeatherIcon(currentIcon);
 
   const iconElement = document.querySelector(".weather-icon");
-  iconElement.className = `wi ${iconClass}`;
+
+  iconElement.className = `weather-icon wi ${iconClass}`;
 
   //feelslike
   const feelslikeselector = document.querySelector(".feelslike");
@@ -131,7 +167,7 @@ function displayCurrent(weatherData) {
   const rmaxTemp = Math.round(maxTemp);
   feelslikeselector.innerHTML = `${rminTemp}° / ${rmaxTemp}° Feels like ${roundedFeels}°`;
 }
-
+let myChart;
 function displayNext12(weatherData, currentTime) {
   if (weatherData.days && weatherData.days.length > 0) {
     let hoursData = [];
@@ -158,8 +194,6 @@ function displayNext12(weatherData, currentTime) {
       hoursData = hoursData.concat(tomorrowHoursSlice);
     }
 
-    console.log("Next 12 hours data:", hoursData);
-
     // Prepare data for the chart
 
     const labels = hoursData.map((hour) => {
@@ -169,14 +203,23 @@ function displayNext12(weatherData, currentTime) {
       const ampm = hours >= 12 ? " PM" : " AM";
       return `${formattedHour}${ampm}`;
     });
-
-    const temperatures = hoursData.map((hour) => Math.round(hour.temp));
+    //if units = metric then convert
+    const temperatures = hoursData.map((hour) => {
+      let temp = hour.temp;
+      if (units === "metric") {
+        temp = setUnitsToCelsius(temp);
+      }
+      return Math.round(temp);
+    });
 
     const minTemp = Math.min(...temperatures) - 10;
     const maxTemp = Math.max(...temperatures) + 10;
     // Create the chart
     const ctx = document.getElementById("graph").getContext("2d");
-    const myChart = new Chart(ctx, {
+    if (myChart) {
+      myChart.destroy();
+    }
+    myChart = new Chart(ctx, {
       type: "line",
       data: {
         labels: labels,
@@ -264,14 +307,23 @@ function display7DayForecast(weatherData) {
     const dayElement = dayElements[index];
     const dayIcon = getWeatherIcon(dayData.icon);
     const dayOfWeek = getDayOfWeek(dayData.datetime);
-    const rmax = Math.round(dayData.tempmax);
-    const rmin = Math.round(dayData.tempmin);
+    //convert to c if necessary
+    let rmin = dayData.tempmin;
+    let rmax = dayData.tempmax;
+    let currentUnits = "F";
+    if (units === "metric") {
+      rmin = setUnitsToCelsius(rmin);
+      rmax = setUnitsToCelsius(rmax);
+      currentUnits = "C";
+    }
+    rmax = Math.round(rmax);
+    rmin = Math.round(rmin);
     dayElement.innerHTML = `
       <h3>${dayOfWeek}</h3>
       <div class="right-day">
         <i class="daily-weather-icon wi ${dayIcon}"></i>
-        <p>High: ${rmax}°F</p>
-        <p>Low: ${rmin}°F</p>
+        <p>High: ${rmax}°${currentUnits}</p>
+        <p>Low: ${rmin}°${currentUnits}</p>
       </div>
     `;
   });
