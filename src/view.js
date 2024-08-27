@@ -33,7 +33,9 @@ function getWeatherIcon(condition) {
   switch (condition.toLowerCase()) {
     case "clear":
       return "wi-day-sunny";
-    case "partially cloudy":
+    case "clear-day":
+      return "wi-day-sunny";
+    case "partly-cloudy-day":
       return "wi-day-cloudy";
     case "cloudy":
       return "wi-cloudy";
@@ -41,6 +43,16 @@ function getWeatherIcon(condition) {
       return "wi-rain";
     case "snow":
       return "wi-snow";
+    case "clear-night":
+      return "wi-night-clear";
+    case "partly-cloudy-night":
+      return "wi-night-alt-cloudy";
+    case "showers-night":
+      return "wi-night-alt-showers";
+    case "showers-day":
+      return "wi-showers";
+    case "thunder-showers-night":
+      return "wi-night-alt-storm-showers";
     default:
       return "wi-na"; // Default icon for unknown conditions
   }
@@ -70,6 +82,7 @@ async function init() {
 function render(city, weatherData) {
   displayHeader(city);
   displayCurrent(weatherData);
+  display7DayForecast(weatherData);
 }
 function displayHeader(city) {
   const locationText = document.querySelector(".locationText");
@@ -82,10 +95,10 @@ function displayHeader(city) {
 function displayCurrent(weatherData) {
   const currentTemp = weatherData.currentConditions.temp;
   const currentTime = weatherData.currentConditions.datetime;
-  const currentIcon = weatherData.currentConditions.icon;
   const currentPrecipProb = weatherData.currentConditions.precipprob;
   const currentConditions = weatherData.currentConditions.conditions;
   const feelslike = weatherData.currentConditions.feelslike;
+  const currentIcon = weatherData.currentConditions.icon;
   const minTemp = weatherData.days[0].tempmin;
   const maxTemp = weatherData.days[0].tempmax;
 
@@ -123,7 +136,7 @@ function displayCurrent(weatherData) {
   const precipirationprobselector = document.querySelector(".precip-prop");
   precipirationprobselector.innerHTML = ` ${currentPrecipProb} `;
   //icon
-  const iconClass = getWeatherIcon(currentConditions);
+  const iconClass = getWeatherIcon(currentIcon);
 
   const iconElement = document.querySelector(".weather-icon");
   iconElement.className = `wi ${iconClass}`;
@@ -235,6 +248,57 @@ function displayNext12(weatherData, currentTime) {
   } else {
     console.error("Hourly data not found in the API response.");
   }
+}
+function getDayOfWeek(dateString) {
+  const date = new Date(dateString + "T00:00:00"); // Force the time to midnight to avoid time zone issues
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return daysOfWeek[date.getDay()];
+}
+
+function display7DayForecast(weatherData) {
+  const dayElements = document.querySelectorAll(".following-days .day");
+  const today = new Date();
+
+  // Filter and exclude today; include tomorrow through the 7th day
+  const filteredDays = weatherData.days.filter((day) => {
+    const forecastDate = new Date(day.datetime + "T00:00:00"); // Force the time to midnight
+    return forecastDate > today && forecastDate <= addDays(today, 7);
+  });
+
+  // Ensure we only take 7 days starting from tomorrow
+  const daysToShow = filteredDays.slice(0, 7);
+
+  // Display the forecast for the filtered days
+  daysToShow.forEach((dayData, index) => {
+    const dayElement = dayElements[index];
+    const dayIcon = getWeatherIcon(dayData.icon);
+    const dayOfWeek = getDayOfWeek(dayData.datetime);
+    const rmax = Math.round(dayData.tempmax);
+    const rmin = Math.round(dayData.tempmin);
+    dayElement.innerHTML = `
+      <h3>${dayOfWeek}</h3>
+      <div class="right-day">
+        <i class="daily-weather-icon wi ${dayIcon}"></i>
+        <p>High: ${rmax}°F</p>
+        <p>Low: ${rmin}°F</p>
+      </div>
+    `;
+  });
+}
+
+// Helper function to add days to a date
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 }
 
 export { init };

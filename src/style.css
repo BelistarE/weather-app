@@ -197,3 +197,13 @@ input:checked + .slider:before {
 .cast {
   font-weight: bold;
 }
+.day {
+  display: flex;
+  color: white;
+  padding: 5px;
+  justify-content: space-between;
+}
+.right-day {
+  display: flex;
+  gap: 5px;
+}
