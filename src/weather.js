@@ -10,6 +10,7 @@ const elements = [
   "precipprob",
   "tempmin",
   "tempmax",
+  "feelslike",
 ];
 const opts = `include=${include}&elements=${elements.join(
   ","
