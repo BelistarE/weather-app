@@ -129,7 +129,26 @@ input:checked + .slider:before {
 .slider:active:before {
   width: 30px;
 }
-
+.location {
+  display: flex;
+}
+.search {
+  background-color: rgba(206, 206, 206, 0.288);
+  color: white;
+  margin-left: 10px;
+  border: none;
+  outline: none;
+  padding: 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.search::placeholder {
+  color: #e7e7e7;
+  text-align: center;
+}
+.search:focus {
+  outline: 1px solid white;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -170,6 +189,7 @@ input:checked + .slider:before {
 }
 .current-tt {
   display: flex;
+  justify-content: space-between;
 }
 
 .right {
