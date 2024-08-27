@@ -1,31 +1,14 @@
 // view.js
 import { getWeather } from "./weather";
 import { fetchUserCity } from "./getlocation";
+import { toggle } from "./convert-units";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
 import "./weather-icons.min.css";
 
 //toggle units
-const toggle = document.getElementById("toggle");
-
-let units = "us";
-
-// Add an event listener for the toggle change
-toggle.addEventListener("change", function () {
-  // Check if the toggle is checked
-  if (toggle.checked) {
-    units = "metric";
-  } else {
-    units = "us";
-  }
-
-  // Output the current units (for debugging)
-  console.log("Units:", units);
-
-  // Here you can make your API call or update the UI with the new units
-});
-
+let units = toggle();
 const main = document.querySelector(".app");
 //icon mapping
 function getWeatherIcon(condition) {

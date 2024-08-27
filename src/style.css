@@ -154,6 +154,10 @@ input:checked + .slider:before {
 }
 .following-days {
   background-color: rgba(206, 206, 206, 0.288);
+  padding-top: 5%;
+  padding-bottom: 5%;
+  margin-bottom: 10%;
+  height: 100%;
 }
 .section {
   margin: 20px;
@@ -201,9 +205,12 @@ input:checked + .slider:before {
   display: flex;
   color: white;
   padding: 5px;
+  padding-left: 5%;
+  padding-right: 5%;
   justify-content: space-between;
 }
 .right-day {
   display: flex;
   gap: 5px;
+  align-items: center;
 }
