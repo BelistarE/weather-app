@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beli's Weather App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="weather-icons.min.css">
+  <script defer src="bundle.js"></script></head>
+  <body>
+    <div id="loading-screen">
+      <p class="loading">loading...</p>
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <div class="app" style="display: none">
+      <div class="header section">
+        <div class="location">
+          <div class="location-container">
+            <h2 class="locationText"></h2>
+            <h4 class="country"></h4>
+          </div>
+          <input type="text" class="search" placeholder="Search for a different city" id="searchInput">
+          <button class="search-button" id="searchButton" style="display: none;">Go</button>
+        </div>
+        <div class="toggle-container">
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="current-weather section">
+        <div class="top-section">
+          <h4>Current weather</h4>
+          <p class="time"></p>
+        </div>
+        <div class="current-tt">
+          <div class="left">
+            <i class="weather-icon wi"></i>
+            <p class="current-temp"></p>
+
+          </div>
+          <div class="right">
+            <p class="cast"></p>
+            <p class="feelslike"></p>
+            <p class="minmax"></p>
+            <div class="precipitation">
+              <p class="prec">Precipitation probability</p>
+              <p class="prec precip-prop"></p>
+              <p class="prec">%</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="next section">
+        <canvas id="graph"></canvas>
+      </div>
+        <div class="following-days section">
+          <div class="day one"></div>
+          <div class="day two"></div>
+          <div class="day three"></div>
+          <div class="day four"></div>
+          <div class="day five"></div>
+          <div class="day six"></div>
+          <div class="day seven"></div>
+        </div>
+        <div class="credits section">
+          <p>made by Isabeli Estefano</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
