@@ -21,6 +21,8 @@ const searchButton = document.getElementById("searchButton");
 
 function handleSearch() {
   const query = searchInput.value;
+  searchInput.value = "";
+  searchButton.style.display = "none";
   callNew(query);
 }
 

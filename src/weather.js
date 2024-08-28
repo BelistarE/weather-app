@@ -40,6 +40,8 @@ async function getWeather(city, units) {
     return data;
   } catch (error) {
     console.error("Error in getWeather:", error);
+    alert("Invalid city name. Please try again.");
+    document.getElementById("loading-screen").style.display = "none";
     throw error;
   }
 }

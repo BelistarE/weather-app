@@ -7,7 +7,7 @@ Chart.register(ChartDataLabels);
 import "./weather-icons.min.css";
 
 let units = "us";
-
+let myChart;
 const main = document.querySelector(".app");
 //icon mapping
 function getWeatherIcon(condition) {
@@ -39,10 +39,17 @@ function getWeatherIcon(condition) {
       return "wi-na"; // Default icon for unknown conditions
   }
 }
-
+const button = document.getElementById("searchButton");
+function handleClick() {
+  if (myChart) {
+    myChart.destroy();
+  }
+}
 async function init() {
   // Show the loading screen
   document.getElementById("loading-screen").style.display = "flex";
+
+  button.addEventListener("click", handleClick);
 
   try {
     const city = await fetchUserCity();
@@ -55,15 +62,15 @@ async function init() {
     document.getElementById("loading-screen").style.display = "none";
     document.querySelector(".app").style.display = "flex";
     //display stuff
-    render(city, weatherData);
+    render(weatherData);
   } catch (error) {
     console.error("Error during initialization:", error);
   }
 }
 
-function render(city, weatherData) {
+function render(weatherData) {
   const currentTime = weatherData.currentConditions.datetime;
-  displayHeader(city);
+  displayHeader(weatherData);
   toggle(weatherData);
   displayCurrent(weatherData);
   displayNext12(weatherData, currentTime);
@@ -95,13 +102,25 @@ function toggle(weatherData) {
   return units;
 }
 
-function displayHeader(city) {
+function getCountryFromAddress(address) {
+  const parts = address.split(",");
+  const country = parts[parts.length - 1].trim();
+
+  return country;
+}
+function displayHeader(weatherData) {
+  let city = weatherData.resolvedAddress;
   const locationText = document.querySelector(".locationText");
   console.log("city unformatted:" + city);
   const parts = city.split(",").map((part) => part.trim());
 
-  const cityName = parts[0];
+  let cityName = parts[0];
+
   locationText.textContent = cityName;
+
+  const country = getCountryFromAddress(weatherData.resolvedAddress);
+  const countrytext = document.querySelector(".country");
+  countrytext.textContent = country;
 }
 function displayCurrent(weatherData) {
   let currentTemp = weatherData.currentConditions.temp;
@@ -167,7 +186,7 @@ function displayCurrent(weatherData) {
   const rmaxTemp = Math.round(maxTemp);
   feelslikeselector.innerHTML = `${rminTemp}° / ${rmaxTemp}° Feels like ${roundedFeels}°`;
 }
-let myChart;
+
 function displayNext12(weatherData, currentTime) {
   if (weatherData.days && weatherData.days.length > 0) {
     let hoursData = [];
@@ -195,7 +214,7 @@ function displayNext12(weatherData, currentTime) {
     }
 
     // Prepare data for the chart
-
+    let borders = 10;
     const labels = hoursData.map((hour) => {
       const date = new Date(`1970-01-01T${hour.datetime}`);
       const hours = date.getHours();
@@ -208,12 +227,13 @@ function displayNext12(weatherData, currentTime) {
       let temp = hour.temp;
       if (units === "metric") {
         temp = setUnitsToCelsius(temp);
+        borders = 5;
       }
       return Math.round(temp);
     });
 
-    const minTemp = Math.min(...temperatures) - 10;
-    const maxTemp = Math.max(...temperatures) + 10;
+    const minTemp = Math.min(...temperatures) - borders;
+    const maxTemp = Math.max(...temperatures) + borders;
     // Create the chart
     const ctx = document.getElementById("graph").getContext("2d");
     if (myChart) {
