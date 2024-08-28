@@ -72,7 +72,6 @@ body:before {
 }
 .toggle-container {
   display: flex;
-  align-items: center;
 }
 
 .toggle-switch {
@@ -102,7 +101,7 @@ body:before {
 
 .slider:before {
   position: absolute;
-  content: "F"; /* Default text */
+  content: "F";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,7 +113,7 @@ body:before {
   background-color: white;
   transition: 0.4s;
   font-size: 14px;
-  color: #000; /* Text color */
+  color: #646464; /* Text color */
 }
 
 input:checked + .slider {
@@ -135,12 +134,13 @@ input:checked + .slider:before {
 .search {
   background-color: rgba(206, 206, 206, 0.288);
   color: white;
-  margin-left: 10px;
+  margin-left: 20px;
   border: none;
   outline: none;
   padding: 5px;
   box-sizing: border-box;
   overflow: hidden;
+  height: 60%;
 }
 .search::placeholder {
   color: #e7e7e7;
@@ -170,6 +170,9 @@ input:checked + .slider:before {
   width: 100%;
   height: 400px;
   position: relative;
+}
+#graph {
+  margin: 5%;
 }
 .following-days {
   background-color: rgba(206, 206, 206, 0.288);
@@ -238,4 +241,22 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.credits {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-button {
+  height: 60%;
+  margin-left: 10px;
+  background-color: rgba(220, 220, 220, 0.288);
+  border-radius: 5px;
+}
+
+.current-temp {
+  margin-left: 20px;
 }
